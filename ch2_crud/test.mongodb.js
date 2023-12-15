@@ -1,6 +1,6 @@
 // playground : 연습장 만들어서,
 // 전체 실행: ctrl + alt + r
-// 한줄 실행: ctrl + alt + s
+// 한 줄 실행: ctrl + alt + s
 use("testBlog");
 db.users.insertOne({ x: 1 });
 

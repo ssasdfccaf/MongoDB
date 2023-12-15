@@ -29,7 +29,7 @@ db.rating.aggregate([
   },
 ]);
 
-//기본 스테이지 예시들
+// 기본 스테이지 예시
 db.rating.aggregate([
   {
     $project: { _id: 1, rating: 1 },
@@ -46,7 +46,7 @@ db.rating.aggregate([
 //
 db.rating.aggregate([
   {
-    //multiply 새 필드를 추가함.
+    //multiply 새 필드 추가
     // $multiply 함수는 [요소1,요소2]: 요소1 x 요소2
     $project: {
       _id: 0,
@@ -57,7 +57,7 @@ db.rating.aggregate([
   },
 ]);
 
-// $group 안에 , $sum 과 비슷한 함수들이 존재.  $first, $last, min,max ,
+// $group 안에 $sum 과 비슷한 함수들 존재  $first, $last, min,max ,
 db.rating.aggregate([
   {
     $match: {
@@ -83,7 +83,7 @@ db.rating.aggregate([
   },
 ]);
 
-// 평정 4 이상인 사용자의 id 들을 배열의 형태로 정리하도록 명령.
+// 평점 4 이상인 사용자의 id 들을 배열의 형태로 정리하도록 명령
 db.rating.aggregate([
   {
     $match: {
@@ -91,14 +91,14 @@ db.rating.aggregate([
         $gte: 4,
       },
     },
-  }, //스테이지 중하나인  match : 조건
+  }, //스테이지 중 하나인  match: 조건
   {
     $group: {
       _id: "$rating",
       user_ids: {
-        // $push 대신에, $first, $last, $min, $max , $addToSet,
+        // $push 대신 $first, $last, $min, $max , $addToSet,
         // $avg
-        $push: "$user_id", // 배열로 만들기.
+        $push: "$user_id", // 배열로 만들기
       },
     },
   },
@@ -112,33 +112,33 @@ db.rating.aggregate([
         $gte: 4,
       },
     },
-  }, //스테이지 중하나인  match : 조건, 1번째  스테이지
+  }, // 스테이지 중 하나인  match : 조건, 1번째  스테이지
   {
     $group: {
       _id: "$rating",
       user_ids: {
-        $push: "$user_id", // 배열로 만들기. 2번째 스테이지.
+        $push: "$user_id", // 배열로 만들기. 2번째 스테이지
       },
     },
   },
   {
     $unwind: "$user_ids",
-  }, // 3번째 스테이지 , unwind 확인.
+  }, // 3번째 스테이지 , unwind 확인
 ]);
 
-// $out , 어느 컬렉션에 출력할거니?
+// $out , 어느 컬렉션에 출력?
 db.rating.aggregate([
   {
     $group: {
       _id: "$rating",
       user_ids: {
-        $push: "$user_id", // 배열로 만들기. 2번째 스테이지.
+        $push: "$user_id", // 배열로 만들기. 2번째 스테이지
       },
     },
   },
   {
-    $out: "user_ids_by_rating", //컬렉션 이름.
-  }, // out 어느 컬렉션 저장.
+    $out: "user_ids_by_rating", // 컬렉션 이름
+  }, // out 어느 컬렉션 저장?
 ]);
 db.user_ids_by_rating.find();
 
@@ -157,23 +157,24 @@ db.rating.aggregate([
   },
 ]);
 
-// 고급 스테이지 소개.
+// 고급 스테이지 소개
 // $bucket
 db.rating.aggregate([
   {
     $bucket: {
       groupBy: "$rating",
       boundaries: [2, 3, 5],
-      default: "Others", // 범위 밖의 기본값 필드의 이름.
+      default: "Others", // 범위 밖의 기본값 필드의 이름
       output: {
         count: { $sum: 1 },
-        user_ids: { $push: "$user_id" }, // 배열로 나타내기.
+        user_ids: { $push: "$user_id" }, // 배열로 나타내기
       },
     },
   },
 ]);
 
-//고급 스테이지 , $facet -> 배열로 만들기, $bucketAuto , 자동 등분 나누기.
+/* 고급 스테이지 */
+//$facet -> 배열로 만들기, $bucketAuto -> 자동 등분 나누기
 db.rating.aggregate([
   {
     $facet: {
@@ -185,7 +186,7 @@ db.rating.aggregate([
   },
 ]);
 
-//$lookup
+/ /$lookup
 db.by_month.aggregate([
   {
     $lookup: {
@@ -198,7 +199,7 @@ db.by_month.aggregate([
   { $limit: 1 },
 ]);
 
-//$replaceRoot
+/ $replaceRoot
 db.by_month.aggregate([
   {
     $addFields: {
@@ -215,14 +216,14 @@ db.by_month.aggregate([
   },
 ]);
 
-//sample -> 랜덤뽑기
+// sample -> 랜덤 뽑기
 db.rating.aggregate([
   {
     $sample: { size: 3 },
   },
 ]);
 
-//sortByCount
+// sortByCount
 db.rating.aggregate([
   {
     $sortByCount: "$rating",

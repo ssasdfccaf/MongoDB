@@ -11,30 +11,29 @@ db.employees.getIndexes();
 db.employees.createIndex({ deptno: 1 });
 db.employees.find({ deptno: 10 }).pretty();
 
-// empno : 검색 explain 확인.
+// empno: 검색 explain 확인 O
 // 인덱스 설정
 db.employees.find({ empno: 101 }).explain();
 
-// 인덱스 설정 아직 안함.
+// 인덱스 설정 아직 X
 db.employees.find({ deptno: 10 }).explain();
 
-// 인덱스 설정 후 확인.
+// 인덱스 설정 후 확인 O
 db.employees.find({ deptno: 10 }).explain();
 
 db.employees.find({ deptno: 10 }).sort({ empno: -1 });
 db.employees.find({ deptno: 10 }).sort({ empno: -1 }).explain();
 
-//
 db.employees.find({ empno: 101 }).sort({ deptno: -1 }).explain();
 
 // 인덱스 삭제
 db.employees.dropIndex({ empno: 1 });
 db.employees.dropIndex({ deptno: 1 });
 
-// 삭제 후, 확인.
+// 삭제 후, 확인
 db.employees.getIndexes();
 
-// deptno 조회식, 인덱스로 검색을 안하는 부분 확인.
+// deptno 조회식: 인덱스로 검색X 부분 확인
 db.employees.find({ deptno: 10 }).explain();
 
 //샘플 코드
@@ -121,7 +120,7 @@ db.employees.insertMany([
   },
 ]);
 
-// 좌표 관련 , 인덱스 이용해서 검색 해보기.
+// 좌표 관련: 인덱스로 검색
 db.users.insertOne({ x: 1 });
 
 // GeoSpatial INDEX

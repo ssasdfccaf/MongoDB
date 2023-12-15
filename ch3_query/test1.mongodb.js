@@ -1,17 +1,17 @@
-//use("test");
+// use("test");
 // find(<query>,<projection>)
-// query : 조건부, projection : 보고 싶은 열
-// 교차로내.accident_count" 이것만 보여주고, 나머지 열 안보여줘됨. -> 단, _id 는 제외.
+// query: 조건부, projection: 보고 싶은 열
+// 교차로 내 .accident_count"만 보여주기 -> _id 제외 
 
 db.by_road_type.find({ county: "강릉시" }, { "교차로내.accident_count": 1 });
 
-// _id 제외해죠 select 교차로내.accident_count
+// _id 제외: elect 교차로 내.accident_count
 db.by_road_type.find(
   { county: "강릉시" },
-  { "교차로내.accident_count": 1, _id: 0 }
+  { "교차로 내.accident_count": 1, _id: 0 }
 );
 
-// 다보여줘. select *
+// select * 모두 보여주기
 db.by_road_type.find({ county: "강릉시" });
 
 db.by_road_type.find(
@@ -24,7 +24,7 @@ db.by_road_type.find(
   { city_or_province: 1, county: 1 }
 );
 
-//use("test");
+// use("test");
 db.inventory.insertMany([
   { item: "journal", qty: 25, tags: ["blank", "red"] },
   { item: "notebook", qty: 50, tags: ["red", "blank"] },
@@ -33,7 +33,7 @@ db.inventory.insertMany([
   { item: "postcard", qty: 45, tags: ["blue"] },
 ]);
 
-// 쿼리 예제 , 한문장 씩 확인 해보기. (projection, 모든 컬럼 보여줘.)
+// 쿼리 예제 - 한문장 씩 확인 (projection: 모든 컬럼 보여주기)
 db.inventory.find({ item: { $eq: "journal" } });
 
 db.inventory.find({ item: "journal" });
@@ -109,16 +109,16 @@ db.by_month.find({
 // 순서가 중요함
 db.inventory.find({ tags: ["red", "blank"] });
 db.inventory.find({ tags: ["blank", "red"] });
-// $all을 쓰면 "red", "blank" 순서와 상관 없이 해당 요소가 있는지만 확인
-db.inventory.find({ tags: { $all: ["red", "blank"] } });
 
-db.collection.find({ tags: { $size: 5 } }); //배열 lenth가 3인 문서
+// $all => tory.find({ tags: { $all: ["red", "blank"] } });
+
+db.collection.find({ tags: { $size: 5 } }); // 배열 length가 { }인 문서
 
 // {item: "book", tags: ["red", "blank"]}
 // 잘못됨. tags의 첫번째 인자[0]가 아니라 tags 배열의 0이란 원소를 출력하라는 의미
 db.collection.find({}, { "tags.10": 1 });
 
-// tags 배열의 [0], [1]을 출력하라 (앞에서 부터 2개를 출력하라)
+// tags 배열의 [0], [1]을 출력하라 (앞에서 부터 2개를 출력하라.)
 db.collection.find({}, { tags: { $slice: 2 } });
 
 // tags 배열의 [2:3] 을 출력하라
@@ -129,8 +129,8 @@ db.collection.find({}, { tags: { $slice: [2, 1] } });
 // test #m 사용
 db.inventory.find({ item: /^p/i });
 
-// #특정 조건에 부합하는 필드만 출력하라
-// 확인 필요.
+// #(특정 조건에 부합하는 필드만 출력하라.)
+// 확인 필요
 db.inventory.find(
   {},
   { tags: { $elemMatch: { $regex: /^b/ } }, _id: 0, item: 0, qty: 0 }
@@ -141,5 +141,5 @@ db.inventory.find(
   { tags: { $elemMatch: { $regex: /^b/ } }, qty: 1, item: 1 }
 );
 
-// #특정 조건에 부합하는 첫번째 데이터만 출력하라
+// #(특정 조건에 부합하는 첫번째 데이터만 출력하라.)
 db.inventory.find({ tags: "red" }, { "tags.$": true });
