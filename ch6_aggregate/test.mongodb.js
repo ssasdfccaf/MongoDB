@@ -199,7 +199,7 @@ db.by_month.aggregate([
   { $limit: 1 },
 ]);
 
-/ $replaceRoot
+// $replaceRoot
 db.by_month.aggregate([
   {
     $addFields: {
